@@ -1,9 +1,12 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="رفيق الطالب الذكي", layout="wide")
+st.set_page_config(
+    page_title="رفيق الطالب الذكي",
+    page_icon="logo.png",
+    layout="wide"
+)
 
-# إخفاء هوامش Streamlit الافتراضية ليظهر الموقع بملء الشاشة
 st.markdown("""
     <style>
         .block-container { padding: 0rem; max-width: 100%; }
