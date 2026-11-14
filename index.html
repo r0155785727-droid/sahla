@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رفيق الطالب الذكي - الجدول الأسبوعي المتكامل</title>
+<link href="https://googleapis.com" rel="stylesheet">
+<style>
+:root{--blue:#2563eb;--green:#16a34a;--gray:#f1f5f9;--white:#ffffff;--dark:#0f172a;--muted:#64748b;--border:#e2e8f0}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Cairo',sans-serif}
+body{background:radial-gradient(circle at top,#1e293b,#090d16);display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+.app{background:var(--gray);width:100%;max-width:1160px;border-radius:18px;overflow:hidden;border:2px solid rgba(59,130,246,.55);box-shadow:0 0 38px rgba(59,130,246,.35),0 20px 50px rgba(0,0,0,.7)}
+header{background:var(--white);padding:15px 28px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:12px}
+.h-right{display:flex;align-items:center;gap:15px}
+.logo{color:var(--blue);font-size:22px;font-weight:800;text-shadow:0 0 12px rgba(37,99,235,.2)}
+select{padding:7px 14px;border:2px solid #93c5fd;border-radius:10px;color:var(--blue);font-weight:700;font-size:13.5px;background:#eff6ff;outline:none;cursor:pointer}
+.btn-gen{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;padding:9px 18px;border-radius:10px;font-weight:700;font-size:13.5px;cursor:pointer;box-shadow:0 0 15px rgba(37,99,235,.4);transition:.2s}
+.btn-gen:hover{transform:translateY(-2px);box-shadow:0 0 22px rgba(37,99,235,.65)}
+.days-bar{background:#e2e8f0;padding:10px 28px;display:flex;gap:8px;overflow-x:auto;border-bottom:1px solid #cbd5e1}
+.day-btn{flex:1;min-width:85px;padding:8px 12px;border:none;border-radius:9px;background:var(--white);color:var(--dark);font-weight:700;font-size:13px;cursor:pointer;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.day-btn.active{background:var(--blue);color:#fff;box-shadow:0 0 12px rgba(37,99,235,.45)}
+.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;padding:20px 28px}
+.card{background:var(--white);border-radius:15px;padding:18px;border:1px solid rgba(147,197,253,.6);box-shadow:0 0 18px rgba(37,99,235,.08);display:flex;flex-direction:column}
+.c-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.c-title{color:var(--blue);font-size:16.5px;font-weight:800}
+.badge{background:#dcfce7;color:#166534;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700}
+.s-form{display:flex;gap:8px;align-items:flex-end;margin-bottom:12px}
+.ig{display:flex;flex-direction:column;gap:3px}.ig.t{flex:2}.ig.tm{flex:1}
+.ig label{font-size:11.5px;color:var(--muted);font-weight:600}
+.ig input{padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;outline:none}
+.btn-add{background:var(--green);color:#fff;border:none;padding:8px 15px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px}
+.s-list{list-style:none;display:flex;flex-direction:column;gap:7px;max-height:255px;overflow-y:auto;padding-left:4px}
+.s-item{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--dark);padding:8px 12px;border-radius:8px;background:#f8fafc;border-right:4px solid var(--blue)}
+.s-item.pr{border-right-color:#f59e0b;background:#fffbeb}
+.s-item.slp{border-right-color:#6366f1;background:#eef2ff}
+.s-item.std{border-right-color:#10b981;background:#ecfdf5}
+.s-item.lnch{border-right-color:#f97316;background:#fff7ed}
+.del{color:#ef4444;background:none;border:none;cursor:pointer;font-weight:700}
+.p-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.p-item{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:700;color:var(--dark);padding:7px 12px;background:#f8fafc;border-radius:8px}
+.p-time{color:var(--blue)}
+.scan{border:2px dashed #93c5fd;border-radius:12px;padding:18px;text-align:center;cursor:pointer;background:#f8fafc;flex:1;display:flex;flex-direction:column;justify-content:center}
+.cam{width:46px;height:46px;background:var(--blue);color:#fff;border-radius:50%;display:flex;justify-content:center;align-items:center;margin:0 auto 8px;font-size:20px}
+#ai-res{margin-top:8px;padding:8px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:8px;font-size:12px;color:#065f46;display:none}
+.v-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.v-card{height:68px;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#fff;font-weight:700;font-size:12px;text-align:center;padding:4px;transition:.2s}
+.v-card:hover{transform:scale(1.04)}
+.c1{background:linear-gradient(135deg,#b45309,#78350f)}.c2{background:linear-gradient(135deg,#1d4ed8,#1e3a8a)}.c3{background:linear-gradient(135deg,#047857,#064e3b)}
+.c4{background:linear-gradient(135deg,#7e22ce,#581c87)}.c5{background:linear-gradient(135deg,#be123c,#881337)}.c6{background:linear-gradient(135deg,#0f766e,#115e59)}
+.c7{background:linear-gradient(135deg,#4338ca,#312e81)}.c8{background:linear-gradient(135deg,#a16207,#713f12)}.c9{background:linear-gradient(135deg,#374151,#111827)}
+.b-bar{background:#0f172a;padding:11px 28px;display:flex;justify-content:center;gap:16px;border-top:1px solid rgba(59,130,246,.3)}
+.pill{background:#1e293b;color:#f8fafc;border:1px solid #3b82f6;padding:7px 35px;border-radius:99px;font-size:13px;font-weight:600;cursor:pointer}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);justify-content:center;align-items:center;z-index:100;padding:16px}
+.m-box{background:#fff;padding:20px;border-radius:16px;width:100%;max-width:600px;max-height:85vh;overflow-y:auto;border:2px solid #3b82f6}
+.m-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:12px}
+.t-card{display:flex;justify-content:space-between;align-items:center;padding:10px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;background:#f8fafc}
+.w-btn{background:#dc2626;color:#fff;text-decoration:none;padding:5px 13px;border-radius:6px;font-size:12px;font-weight:700}
+.x-btn{background:#ef4444;color:#fff;border:none;padding:5px 13px;border-radius:8px;cursor:pointer;font-weight:700}
+.g-row{display:flex;gap:10px;margin-bottom:11px;align-items:center}.g-row label{flex:1;font-size:13px;font-weight:600}.g-row input{padding:7px;border:1px solid #cbd5e1;border-radius:8px;width:125px}
+@media(max-width:768px){.grid{grid-template-columns:1fr}.v-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<div class="h-right">
+<div class="logo">✨ رفيق الطالب الذكي</div>
+<select id="grade" onchange="loadSubs()">
+<optgroup label="المرحلة الابتدائية"><option value="p1">أولى ابتدائي (1ب)</option><option value="p2">تانية ابتدائي (2ب)</option><option value="p3">تالتة ابتدائي (3ب)</option><option value="p4">رابعة ابتدائي (4ب)</option><option value="p5">خامسة ابتدائي (5ب)</option><option value="p6">ستة ابتدائي (6ب)</option></optgroup>
+<optgroup label="المرحلة الإعدادية"><option value="m1">أولى إعدادي (1ع)</option><option value="m2">تانية إعدادي (2ع)</option><option value="m3" selected>تالتة إعدادي (3ع)</option></optgroup>
+<optgroup label="المرحلة الثانوية"><option value="s1">أولى ثانوي (1ث - نظام حديث)</option><option value="s2">تانية ثانوي (2ث)</option><option value="s3">تالتة ثانوي (3ث)</option></optgroup>
+</select>
+</div>
+<button class="btn-gen" onclick="document.getElementById('gModal').style.display='flex'">🗓️ نظّم جدول الأسبوع بالكامل</button>
+</header>
+<div class="days-bar" id="daysBar">
+<button class="day-btn active" onclick="setDay('sat',this)">السبت</button>
+<button class="day-btn" onclick="setDay('sun',this)">الأحد</button>
+<button class="day-btn" onclick="setDay('mon',this)">الإثنين</button>
+<button class="day-btn" onclick="setDay('tue',this)">الثلاثاء</button>
+<button class="day-btn" onclick="setDay('wed',this)">الأربعاء</button>
+<button class="day-btn" onclick="setDay('thu',this)">الخميس</button>
+<button class="day-btn" onclick="setDay('fri',this)">الجمعة (مراجعة)</button>
+</div>
+<div class="grid">
+<div class="card">
+<div class="c-head"><h3 class="c-title" id="dayTitle">جدول يوم: السبت</h3><button onclick="weekTasks[curDay]=[];saveAndRender()" style="background:none;border:none;color:#ef4444;font-size:12px;cursor:pointer;font-weight:700">مسح اليوم</button></div>
+<div class="s-form">
+<div class="ig t"><label>أضف درس أو ميعاد خاص لهذا اليوم</label><input type="text" id="tIn" placeholder="مثال: درس رياضيات أو تمرين"></div>
+<div class="ig tm"><label>الوقت</label><input type="time" id="tmIn" value="17:00"></div>
+<button class="btn-add" onclick="addT()">إضافة</button>
+</div>
+<ul class="s-list" id="sList"></ul>
+</div>
+<div class="card">
+<div class="c-head"><h3 class="c-title">مواقيت الصلاة (مصر)</h3><span class="badge" id="pDate">توقيت القاهرة</span></div>
+<ul class="p-list" id="pList"></ul>
+</div>
+<div class="card">
+<div class="c-head"><h3 class="c-title">مكتبة الفيديوهات (كل مادة منفصلة)</h3><span style="font-size:11.5px;color:#64748b">اختر المادة لعرض المدرسين</span></div>
+<div class="v-grid" id="vGrid"></div>
+</div>
+<div class="card">
+<div class="c-head"><h3 class="c-title">ماسح الواجبات بالذكاء الاصطناعي</h3></div>
+<input type="file" id="hwFile" accept="image/*" style="display:none" onchange="scanHw(event)">
+<div class="scan" onclick="document.getElementById('hwFile').click()">
+<div class="cam">📷</div><h4>تصوير الواجب وحلّه</h4><p style="font-size:11.5px;color:#64748b">اضغط لرفع صورة المسألة للحصول على الحل</p>
+</div>
+<div id="ai-res"></div>
+</div>
+</div>
+<div class="b-bar">
+<button class="pill" onclick="navigator.clipboard.writeText(location.href);alert('تم نسخ رابط الموقع!')">🔗 مشاركة الموقع</button>
+<button class="pill" onclick="dlSch()">⬇️ تنزيل جدول الأسبوع</button>
+</div>
+</div>
+<div class="modal" id="tModal"><div class="m-box"><div class="m-head"><h3 id="mTitle" style="color:#2563eb">مدرسي المادة</h3><button class="x-btn" onclick="document.getElementById('tModal').style.display='none'">إغلاق ✕</button></div><div id="tList"></div></div></div>
+<div class="modal" id="gModal"><div class="m-box"><div class="m-head"><h3 style="color:#2563eb">🗓️ إعداد الجدول الأسبوعي الذكي</h3><button class="x-btn" onclick="document.getElementById('gModal').style.display='none'">إغلاق ✕</button></div><p style="font-size:12.5px;color:#475569;margin-bottom:12px">سأقوم بتوزيع جميع موادك بالتناوب على أيام الأسبوع السبعة، مع تخصيص وقت للغداء والراحة والصلوات الخمس والنوم:</p><div class="g-row"><label>☀️ موعد الاستيقاظ والمدرسة:</label><input type="time" id="wTm" value="07:00"></div><div class="g-row"><label>🍽️ موعد العودة والغداء والراحة:</label><input type="time" id="lTm" value="14:30"></div><div class="g-row"><label>😴 موعد النوم الليلي:</label><input type="time" id="sTm" value="22:30"></div><button class="btn-gen" style="width:100%;padding:11px" onclick="genWeekSch()">توزيع المواد على أيام الأسبوع 🚀</button></div></div>
+<script>
+let p24={Fajr:'04:55',Dhuhr:'11:40',Asr:'14:35',Maghrib:'16:58',Isha:'18:18'};
+function f12(t){let[h,m]=t.split(':');h=parseInt(h);let p=h>=12?'م':'ص';h=h%12||12;return`${h.toString().padStart(2,'0')}:${m} ${p}`}
+function drawP(t){document.getElementById('pList').innerHTML=`<li class="p-item"><span>الفجر</span><span class="p-time">🌙 ${f12(t.Fajr)}</span></li><li class="p-item"><span>الظهر</span><span class="p-time">☀️ ${f12(t.Dhuhr)}</span></li><li class="p-item"><span>العصر</span><span class="p-time">🌤️ ${f12(t.Asr)}</span></li><li class="p-item"><span>المغرب</span><span class="p-time">🌇 ${f12(t.Maghrib)}</span></li><li class="p-item"><span>العشاء</span><span class="p-time">🌙 ${f12(t.Isha)}</span></li>`}
+drawP(p24);
+fetch('https://aladhan.com').then(r=>r.json()).then(d=>{let t=d.data.timings;p24={Fajr:t.Fajr,Dhuhr:t.Dhuhr,Asr:t.Asr,Maghrib:t.Maghrib,Isha:t.Isha};document.getElementById('pDate').innerText=d.data.date.readable;drawP(p24)}).catch(()=>{});
+const db={
+p:[
+{n:"لغة عربية",c:"c1",t:["مستر محمد صلاح (بسطتهالك)","ذاكرلي عربي - كريم شندي","قناة مدرستنا"]},
+{n:"رياضيات",c:"c2",t:["مستر محمد إبراهيم","مستر لطفي زهران","أكاديمية خان"]},
+{n:"علوم",c:"c3",t:["مستر حامد البيومي","مس أسماء للعلوم"]},
+{n:"لغة إنجليزية",c:"c4",t:["مستر عمرو رجب","مس إيناس ناصر"]},
+{n:"دراسات اجتماعية",c:"c5",t:["مستر عطا زكي شحتو","مستر إبراهيم بحيري"]},
+{n:"تكنولوجيا المعلومات",c:"c6",t:["مستر محمود عبد الكريم","قناة مدرستنا"]}
+],
+m:[
+{n:"لغة عربية",c:"c1",t:["مستر محمد صلاح (بسطتهالك)","مستر رضا الفاروق","ذاكرلي عربي"]},
+{n:"رياضيات",c:"c2",t:["مستر أحمد عبد العظيم (مقهى الرياضيات)","مستر محمد إبراهيم","مستر لطفي زهران"]},
+{n:"علوم",c:"c3",t:["مستر محمد عبد السلام","مس أسماء للعلوم","مستر حامد البيومي"]},
+{n:"لغة إنجليزية",c:"c4",t:["مستر عمرو رجب","مستر محمد الديب","انجلشاوي"]},
+{n:"دراسات اجتماعية",c:"c5",t:["مستر عطا زكي شحتو","مستر مهاب سلامة","الخطة التعليمية"]},
+{n:"تربية دينية",c:"c9",t:["مراجعات بسطتهالك","قناة مدرستنا 1"]}
+],
+s1:[
+{n:"علوم متكاملة",c:"c3",t:["مستر خالد صقر (علوم متكاملة)","مستر محمود مجدي (علوم متكاملة)","دكتور أحمد الجوهري (علوم متكاملة)"]},
+{n:"لغة عربية",c:"c1",t:["مستر محمد صلاح (بسطتهالك)","مستر رضا الفاروق","مستر عبد الله الشهاوي"]},
+{n:"رياضيات",c:"c2",t:["مستر لطفي زهران","مستر أحمد الفواخري","مستر سعد عبد الموجود"]},
+{n:"لغة إنجليزية",c:"c4",t:["مستر محمد الديب","انجلشاوي","مستر عمرو رجب"]},
+{n:"تاريخ",c:"c5",t:["القيصر في التاريخ","مستر عطا زكي شحتو","الخطة التعليمية"]},
+{n:"فلسفة ومنطق",c:"c7",t:["مستر تامر صفوت","مستر محمد علي","الخطة التعليمية"]},
+{n:"لغة ثانية",c:"c8",t:["مسيو فرنشاوي","هير شحاتة (ألماني)"]}
+],
+s23:[
+{n:"لغة عربية",c:"c1",t:["مستر محمد صلاح (بسطتهالك)","مستر رضا الفاروق","مستر عبد الله الشهاوي"]},
+{n:"رياضيات",c:"c2",t:["مستر لطفي زهران","مستر أحمد الفواخري","مستر سعد عبد الموجود"]},
+{n:"فيزياء",c:"c3",t:["مستر محمود مجدي","مستر محمد عبد المعبود","مستر حسام خليل"]},
+{n:"كيمياء",c:"c6",t:["مستر خالد صقر","مستر محمد عبد الجواد","مستر عبد الله حبشي"]},
+{n:"أحياء",c:"c3",t:["دكتور أحمد الجوهري","مستر حسن محرم","مستر محمد أيمن"]},
+{n:"لغة إنجليزية",c:"c4",t:["مستر محمد الديب","انجلشاوي","مستر إسلام نمور"]},
+{n:"تاريخ",c:"c5",t:["القيصر في التاريخ","مستر إسلام الصعيدي","الخطة التعليمية"]},
+{n:"جغرافيا",c:"c7",t:["مستر إسلام الصعيدي","مستر أحمد زهران","الخطة التعليمية"]},
+{n:"لغة ثانية",c:"c8",t:["مسيو فرنشاوي","هير شحاتة"]}
+]};
+const dayNames={sat:'السبت',sun:'الأحد',mon:'الإثنين',tue:'الثلاثاء',wed:'الأربعاء',thu:'الخميس',fri:'الجمعة'};
+let curDay='sat';
+let weekTasks=JSON.parse(localStorage.getItem('weekTasksV3'))||{sat:[],sun:[],mon:[],tue:[],wed:[],thu:[],fri:[]};
+function setDay(d,btn){
+curDay=d;
+document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active'));
+btn.classList.add('active');
+document.getElementById('dayTitle').innerText=`جدول يوم: ${dayNames[d]}`;
+renderTasks();
+}
+function getKey(){let v=document.getElementById('grade').value;if(v.startsWith('p'))return'p';if(v.startsWith('m'))return'm';if(v==='s1')return's1';return's23'}
+function loadSubs(){
+let g=document.getElementById('vGrid');g.innerHTML='';
+db[getKey()].forEach(s=>{let d=document.createElement('div');d.className=`v-card ${s.c}`;d.innerHTML=`<div style="font-size:15px;margin-bottom:2px">▶️</div><span>${s.n}</span>`;d.onclick=()=>openT(s);g.appendChild(d)})
+}
+function openT(s){
+let gr=document.getElementById('grade').options[document.getElementById('grade').selectedIndex].text;
+document.getElementById('mTitle').innerText=`مدرسي مادة ${s.n} - ${gr}`;
+let l=document.getElementById('tList');l.innerHTML='';
+s.t.forEach(tc=>{let q=encodeURIComponent(`${tc} ${s.n} ${gr}`);l.innerHTML+=`<div class="t-card"><div><strong>👨‍🏫 ${tc}</strong><p style="font-size:11.5px;color:#64748b">اضغط لمشاهدة الشرح على يوتيوب</p></div><a href="https://youtube.com{q}" target="_blank" class="w-btn">مشاهدة ◀</a></div>`});
+document.getElementById('tModal').style.display='flex'
+}
+function saveAndRender(){localStorage.setItem('weekTasksV3',JSON.stringify(weekTasks));renderTasks()}
+function renderTasks(){
+let l=document.getElementById('sList');l.innerHTML='';
+let list=weekTasks[curDay]||[];
+if(!list.length)l.innerHTML=`<p style="text-align:center;color:#94a3b8;font-size:13px;padding:20px">يوم ${dayNames[curDay]} فارغ.. اضغط على "نظّم جدول الأسبوع بالكامل" بالأعلى</p>`;
+list.sort((a,b)=>a.tm.localeCompare(b.tm));
+list.forEach((t,i)=>{
+let cls=t.tp==='pr'?'pr':t.tp==='slp'?'slp':t.tp==='std'?'std':t.tp==='lnch'?'lnch':'';
+let li=document.createElement('li');li.className=`s-item ${cls}`;
+li.innerHTML=`<span><strong>${f12(t.tm)}</strong> - ${t.tx}</span><button class="del" onclick="weekTasks[curDay].splice(${i},1);saveAndRender()">✕</button>`;
+l.appendChild(li)
+});
+}
+function addT(){let i=document.getElementById('tIn'),t=document.getElementById('tmIn');if(!i.value.trim())return;weekTasks[curDay].push({tm:t.value,tx:`📌 ${i.value.trim()}`,tp:'std'});i.value='';saveAndRender()}
+function addM(s,m){let[h,mn]=s.split(':').map(Number),tot=h*60+mn+m;return`${(Math.floor(tot/60)%24).toString().padStart(2,'0')}:${(tot%60).toString().padStart(2,'0')}`}
+function genWeekSch(){
+let w=document.getElementById('wTm').value,lnc=document.getElementById('lTm').value,slp=document.getElementById('sTm').value;
+let subs=db[getKey()];
+let days=['sat','sun','mon','tue','wed','thu','fri'];
+days.forEach((d,dIdx)=>{
+let base=[
+{tm:p24.Fajr,tx:'🕌 صلاة الفجر',tp:'pr'},
+{tm:d==='fri'?'09:00':w,tx:d==='fri'?'☀️ الاستيقاظ وتناول الإفطار':'☀️ الاستيقاظ والذهاب للمدرسة',tp:'slp'},
+{tm:p24.Dhuhr,tx:d==='fri'?'🕌 صلاة الجمعة':'🕌 صلاة الظهر',tp:'pr'},
+{tm:lnc,tx:'🍽️ وقت الغداء والراحة (ساعة ونصف لاستعادة النشاط)',tp:'lnch'},
+{tm:p24.Asr,tx:'🕌 صلاة العصر',tp:'pr'},
+{tm:p24.Maghrib,tx:'🕌 صلاة المغرب',tp:'pr'},
+{tm:p24.Isha,tx:'🕌 صلاة العشاء',tp:'pr'},
+{tm:slp,tx:'😴 موعد النوم (للحصول على 8 ساعات راحة)',tp:'slp'}
+];
+let studyStart=addM(lnc,90);
+if(d==='fri'){
+base.push({tm:studyStart,tx:'📝 مراجعة شاملة وحل امتحانات على ما تم دراسته في الأسبوع',tp:'std'});
+base.push({tm:addM(studyStart,120),tx:'🎮 وقت حر للترفيه والاستعداد للأسبوع الجديد',tp:'slp'});
+}else{
+for(let k=0;k<3;k++){
+let sub=subs[(dIdx*2+k)%subs.length];
+base.push({tm:addM(studyStart,k*80),tx:`📚 مذاكرة وحل واجبات: مادة ${sub.n} (ساعة تركيز + 20 دقيقة راحة)`,tp:'std'});
+}
+}
+weekTasks[d]=base;
+});
+saveAndRender();document.getElementById('gModal').style.display='none';
+}
+function scanHw(e){let f=e.target.files;if(!f)return;let b=document.getElementById('ai-res');b.style.display='block';b.innerHTML=`✅ تم رفع صورة (${f.name}). أرسل الصورة هنا في المحادثة لأحلها لك فوراً!`}
+function dlSch(){
+let txt="جدول الطالب الأسبوعي المتكامل:\n================================\n";
+Object.keys(dayNames).forEach(d=>{txt+=`\n📅 يوم ${dayNames[d]}:\n`+(weekTasks[d]||[]).map(t=>`  ${f12(t.tm)} - ${t.tx}`).join('\n')+"\n"});
+let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain;charset=utf-8'}));a.download='جدولي-الأسبوعي.txt';a.click()
+}
+loadSubs();renderTasks();
+</script>
+</body>
+</html>
